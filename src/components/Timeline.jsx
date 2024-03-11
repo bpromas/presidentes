@@ -10,6 +10,7 @@ function Timeline({ area, presidents, wrongPresidents }) {
           ref={provided.innerRef}
           {...provided.droppableProps}
         >
+          <div className="timeline-line"></div>
           {area.presidentIds.map((presidentId, index) => {
             const president = presidents.find(
               (pres) => pres.id === presidentId

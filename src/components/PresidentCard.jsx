@@ -12,10 +12,13 @@ function PresidentCard({ president, index, locked, wrong }) {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <img
-            src={president.presidentPicture}
-            alt={president.presidentLabel}
-          />
+          <div className="president-picture-container">
+            <img
+              className="president-picture"
+              src={president.presidentPicture}
+              alt={president.presidentLabel}
+            />
+          </div>
           <div className="president-label">{president.presidentLabel}</div>
         </div>
       )}
