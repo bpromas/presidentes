@@ -1,4 +1,6 @@
-const EveryPresident = [
+import { shuffle } from "/src/helpers.js";
+
+const EveryPresident = shuffle([
   {
     id: "1",
     presidentPicture: "/pics/Deodoro_da_Fonseca.jpg",
@@ -77,12 +79,12 @@ const EveryPresident = [
     presidentLabel: "Washington Luís",
     start_integer: "19261115",
   },
-  {
-    id: "14",
-    presidentPicture: "/pics/Junta_Governativa_Provisória.png",
-    presidentLabel: "Junta Governativa Provisória",
-    start_integer: "19301024",
-  },
+  // {
+  //   id: "14",
+  //   presidentPicture: "/pics/Junta_Governativa_Provisória.png",
+  //   presidentLabel: "Junta Governativa Provisória",
+  //   start_integer: "19301024",
+  // },
   {
     id: "15",
     presidentPicture: "/pics/Getúlio_Vargas.jpg",
@@ -161,12 +163,12 @@ const EveryPresident = [
     presidentLabel: "Artur da Costa e Silva",
     start_integer: "19670315",
   },
-  {
-    id: "28",
-    presidentPicture: "/pics/Junta_militar_brasileira_de_1969.png",
-    presidentLabel: "Ditadura Militar",
-    start_integer: "19690831",
-  },
+  // {
+  //   id: "28",
+  //   presidentPicture: "/pics/Junta_militar_brasileira_de_1969.png",
+  //   presidentLabel: "Ditadura Militar",
+  //   start_integer: "19690831",
+  // },
   {
     id: "29",
     presidentPicture: "/pics/Emílio_Garrastazu_Médici.jpg",
@@ -239,6 +241,6 @@ const EveryPresident = [
     presidentLabel: "Luiz Inácio Lula da Silva (2° Mandato)",
     start_integer: "20230101",
   },
-];
+]);
 
 export default EveryPresident;

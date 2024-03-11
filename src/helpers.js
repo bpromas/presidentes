@@ -1,4 +1,4 @@
-function shuffle(array) {
+const shuffle = (array) => {
   let currentIndex = array.length,
     randomIndex;
 
@@ -13,19 +13,20 @@ function shuffle(array) {
   }
 
   return array;
-}
+};
 
-function preprocess(response) {
-  const bindings = response.results.bindings;
+const isSorted = (arr) => {
+  console.log(arr);
+  for (let i = 1; i < arr.length; i++) {
+    const currentNum = parseInt(arr[i], 10);
+    const previousNum = parseInt(arr[i - 1], 10);
 
-  const cleanPresidents = bindings.map((president, index) => ({
-    id: (index + 1).toString(), // Assuming presidentId should be a unique identifier
-    presidentPicture: president.presidentPicture.value,
-    presidentLabel: president.presidentLabel.value,
-    start_integer: president.start_integer.value,
-  }));
+    if (isNaN(currentNum) || isNaN(previousNum) || currentNum < previousNum) {
+      return false;
+    }
+  }
 
-  return cleanPresidents;
-}
+  return true;
+};
 
-export { shuffle, preprocess };
+export { shuffle, isSorted };

@@ -21,6 +21,10 @@
   margin: 0 0.5rem;
 }
 
+.president-card[data-wrong="true"] .president-label {
+  color: red;
+}
+
 .president-card img {
   width: 100%;
 }

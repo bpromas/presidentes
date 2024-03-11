@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { isSorted } from "./helpers.js";
 import EveryPresident from "./components/EveryPresident.js";
-import { shuffle } from "./helpers.js";
 import SpawnArea from "./components/SpawnArea";
+import Results from "./components/Results";
 import Timeline from "./components/Timeline";
+import MistakesCounter from "./components/MistakesCounter";
 import { DragDropContext } from "react-beautiful-dnd";
 
 function App() {
-  const [presidents, setPresidents] = useState(EveryPresident);
-  useEffect(() => {
-    setPresidents(shuffle(EveryPresident));
-  }, []);
-
-  const [presidentsIndex, setPresidentsIndex] = useState(0);
+  const presidents = EveryPresident;
+  console.log(presidents.length);
+  const [wrongPresidents, setWrongPresidents] = useState([]);
+  const [presidentsIndex, setPresidentsIndex] = useState(1); //Começa do segundo da lista, o primeiro já começa na Timeline
+  const [mistakes, setMistakes] = useState(0);
+  const [gameFinished, setGameFinished] = useState(false);
 
   const [areas, setAreas] = useState({
     spawnarea: {
@@ -20,9 +22,14 @@ function App() {
     },
     timeline: {
       id: "timeline",
-      presidentIds: [],
+      presidentIds: [presidents[0].id],
     },
   });
+
+  const markIncorrect = (draggableId) => {
+    setMistakes(mistakes + 1);
+    setWrongPresidents([...wrongPresidents, draggableId]);
+  };
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -36,8 +43,10 @@ function App() {
       const timelinePresidents = timelineArea.presidentIds;
       timelinePresidents.splice(destination.index, 0, draggableId);
 
-      setPresidentsIndex(presidentsIndex + 1);
-
+      if (!isSorted(timelinePresidents)) {
+        markIncorrect(draggableId);
+        timelinePresidents.sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+      }
       const newSpawn = {
         ...spawnArea,
         president: presidents[presidentsIndex + 1],
@@ -47,39 +56,31 @@ function App() {
         presidentIds: timelinePresidents,
       };
 
+      if (presidentsIndex + 1 === presidents.length) {
+        setGameFinished(true);
+      } else {
+        setPresidentsIndex(presidentsIndex + 1);
+      }
       setAreas({
         ...areas,
         spawnarea: newSpawn,
         timeline: newTimeline,
       });
     }
-
-    // const startPresidentIds = Array.from(start.presidentIds);
-    // startPresidentIds.splice(source.index, 1);
-    // const newStart = {
-    //   ...start,
-    //   presidentIds: startPresidentIds,
-    // };
-
-    // const finishPresidentIds = Array.from(finish.presidentIds);
-    // finishPresidentIds.splice(destination.index, 0, draggableId);
-    // const newFinish = {
-    //   ...finish,
-    //   presidentIds: finishPresidentIds,
-    // };
-
-    // setColumns({
-    //   ...columns,
-    //   [newStart.id]: newStart,
-    //   [newFinish.id]: newFinish,
-    // });
   };
+
   return (
     <div className="app">
+      <MistakesCounter mistakes={mistakes} />
       <DragDropContext onDragEnd={onDragEnd}>
-        <SpawnArea area={areas["spawnarea"]} />
+        <SpawnArea area={areas["spawnarea"]} gameFinished={gameFinished} />
+        <Results gameFinished={gameFinished} />
 
-        <Timeline area={areas["timeline"]} presidents={presidents} />
+        <Timeline
+          area={areas["timeline"]}
+          presidents={presidents}
+          wrongPresidents={wrongPresidents}
+        />
       </DragDropContext>
     </div>
   );

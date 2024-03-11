@@ -1,7 +1,7 @@
 import PresidentCard from "./PresidentCard.jsx";
 import { Droppable } from "react-beautiful-dnd";
 
-function Timeline({ area, presidents }) {
+function Timeline({ area, presidents, wrongPresidents }) {
   return (
     <Droppable droppableId={area.id} direction="horizontal">
       {(provided) => (
@@ -20,6 +20,7 @@ function Timeline({ area, presidents }) {
                 president={president}
                 index={index}
                 locked={true}
+                wrong={wrongPresidents.includes(president.id)}
               />
             );
           })}
