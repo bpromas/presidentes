@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { isSorted } from "./helpers.js";
+import StartGame from "./components/StartGame";
 import EveryPresident from "./components/EveryPresident.js";
 import SpawnArea from "./components/SpawnArea";
 import Results from "./components/Results";
@@ -9,7 +10,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 
 function App() {
   const presidents = EveryPresident;
-  console.log(presidents.length);
+  const [gameHasStarted, setGameHasStarted] = useState(false);
   const [wrongPresidents, setWrongPresidents] = useState([]);
   const [presidentsIndex, setPresidentsIndex] = useState(1); //Começa do segundo da lista, o primeiro já começa na Timeline
   const [mistakes, setMistakes] = useState(0);
@@ -25,6 +26,10 @@ function App() {
       presidentIds: [presidents[0].id],
     },
   });
+
+  const startGame = () => {
+    setGameHasStarted(true);
+  };
 
   const markIncorrect = (draggableId) => {
     setMistakes(mistakes + 1);
@@ -69,21 +74,25 @@ function App() {
     }
   };
 
-  return (
-    <div className="app">
-      <MistakesCounter mistakes={mistakes} />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <SpawnArea area={areas["spawnarea"]} gameFinished={gameFinished} />
-        <Results gameFinished={gameFinished} />
+  if (gameHasStarted) {
+    return (
+      <div className="app">
+        <MistakesCounter mistakes={mistakes} />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <SpawnArea area={areas["spawnarea"]} gameFinished={gameFinished} />
+          <Results gameFinished={gameFinished} />
 
-        <Timeline
-          area={areas["timeline"]}
-          presidents={presidents}
-          wrongPresidents={wrongPresidents}
-        />
-      </DragDropContext>
-    </div>
-  );
+          <Timeline
+            area={areas["timeline"]}
+            presidents={presidents}
+            wrongPresidents={wrongPresidents}
+          />
+        </DragDropContext>
+      </div>
+    );
+  } else {
+    return <StartGame startGame={startGame} />;
+  }
 }
 
 export default App;
